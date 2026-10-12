@@ -14,8 +14,12 @@ class AcquirerSim:
 
     def __init__(self, d: int, k: int = 3, seed: int = 0):
         rng = np.random.default_rng(seed)
-        self.w = rng.normal(0, 1.0, size=(k, d))
-        self.w[:, 0] = rng.normal(0.8, 0.4, size=k)  # intercept -> base approval ~ 60-75%
+        # Acquirers "specialise": strong per-segment and amount effects, similar intercepts,
+        # so the best acquirer depends on context (otherwise routing is trivial).
+        self.w = rng.normal(0, 1.5, size=(k, d))
+        self.w[:, 0] = 0.6 + rng.normal(0, 0.1, size=k)
+        if d > 2:
+            self.w[:, 2] = -np.abs(rng.normal(1.0, 0.5, size=k))  # riskier txns get approved less
         self.fee = np.linspace(0.010, 0.025, k)
         self.k, self.d = k, d
 
@@ -97,7 +101,7 @@ class Static:
 
 
 class RandomPolicy:
-    def __init__(self, k, seed=2):
+    def __init__(self, k, seed=12345):
         self.k, self.rng = k, np.random.default_rng(seed)
 
     def select(self, x):

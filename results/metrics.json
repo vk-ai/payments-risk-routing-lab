@@ -1,0 +1,168 @@
+{
+  "dataset": {
+    "rows": 284807,
+    "fraud_rate": 0.001727485630620034,
+    "split_rows": [
+      170884,
+      56961,
+      56962
+    ],
+    "split_frauds": [
+      360,
+      57,
+      75
+    ],
+    "distinct_amt_key": 32767,
+    "distinct_vbin_key_train": 6680
+  },
+  "models": {
+    "base": {
+      "valid": {
+        "pr_auc": 0.7695281216866051,
+        "roc_auc": 0.9799317286608902
+      },
+      "test": {
+        "pr_auc": 0.8096941448865542,
+        "roc_auc": 0.9827623182800992
+      }
+    },
+    "base_plus_engineered": {
+      "valid": {
+        "pr_auc": 0.772696053892946,
+        "roc_auc": 0.9732245258866271
+      },
+      "test": {
+        "pr_auc": 0.7873163358168623,
+        "roc_auc": 0.9855737397530777
+      }
+    },
+    "test_pr_auc_diff_engineered_minus_base": {
+      "mean": -0.022083151515705706,
+      "ci95": [
+        -0.0478705515900803,
+        0.00024690311593083614
+      ]
+    },
+    "ablation_base_plus_velocity": {
+      "test": {
+        "pr_auc": 0.7990598774056824,
+        "roc_auc": 0.9825991878636595
+      }
+    },
+    "ablation_base_plus_frequency": {
+      "test": {
+        "pr_auc": 0.7961901485882579,
+        "roc_auc": 0.98497254791663
+      }
+    },
+    "ablation_base_plus_target_enc": {
+      "test": {
+        "pr_auc": 0.7915254373583552,
+        "roc_auc": 0.9866071334399775
+      }
+    }
+  },
+  "fraud_amount_test_total": 7729.26,
+  "threshold_table": [
+    {
+      "target_approval_rate_on_valid": 0.95,
+      "threshold": 5.634332468125801e-05,
+      "approval_rate": 0.941978863101717,
+      "fraud_loss_amount": 1170.53,
+      "fraud_loss_share": 0.15144140577493834,
+      "fraud_caught_count": 68,
+      "false_declines": 3237,
+      "false_decline_amount": 718115.3400000001
+    },
+    {
+      "target_approval_rate_on_valid": 0.98,
+      "threshold": 0.00014846617896050195,
+      "approval_rate": 0.9761946560865138,
+      "fraud_loss_amount": 1357.64,
+      "fraud_loss_share": 0.17564941533859646,
+      "fraud_caught_count": 67,
+      "false_declines": 1289,
+      "false_decline_amount": 333644.92000000004
+    },
+    {
+      "target_approval_rate_on_valid": 0.99,
+      "threshold": 0.0003039641855534035,
+      "approval_rate": 0.9880797724798989,
+      "fraud_loss_amount": 1357.64,
+      "fraud_loss_share": 0.17564941533859646,
+      "fraud_caught_count": 67,
+      "false_declines": 612,
+      "false_decline_amount": 192726.19
+    },
+    {
+      "target_approval_rate_on_valid": 0.995,
+      "threshold": 0.0006951588007939724,
+      "approval_rate": 0.9937677750079,
+      "fraud_loss_amount": 1740.04,
+      "fraud_loss_share": 0.22512375052721734,
+      "fraud_caught_count": 64,
+      "false_declines": 291,
+      "false_decline_amount": 121303.81
+    },
+    {
+      "target_approval_rate_on_valid": 0.998,
+      "threshold": 0.0026740671940465094,
+      "approval_rate": 0.9977002212000983,
+      "fraud_loss_amount": 2401.0099999999998,
+      "fraud_loss_share": 0.31063905212141907,
+      "fraud_caught_count": 58,
+      "false_declines": 73,
+      "false_decline_amount": 51699.340000000004
+    },
+    {
+      "target_approval_rate_on_valid": 0.999,
+      "threshold": 0.07737143172538098,
+      "approval_rate": 0.998735999438222,
+      "fraud_loss_amount": 2643.1699999999996,
+      "fraud_loss_share": 0.3419693476477696,
+      "fraud_caught_count": 56,
+      "false_declines": 16,
+      "false_decline_amount": 30873.809999999998
+    },
+    {
+      "target_approval_rate_on_valid": 0.9995,
+      "threshold": 0.9843693015676063,
+      "approval_rate": 0.999385555282469,
+      "fraud_loss_amount": 4145.74,
+      "fraud_loss_share": 0.53636958777425,
+      "fraud_caught_count": 35,
+      "false_declines": 0,
+      "false_decline_amount": 0.0
+    }
+  ],
+  "bandit": {
+    "note": "acquirer outcomes are SIMULATED (toy logistic model + made-up fees)",
+    "k_acquirers": 3,
+    "logged_events_test": 56962,
+    "best_static_chosen_on_valid": 0,
+    "random": {
+      "replay_value": 0.49874096006707896,
+      "replay_matched": 19082
+    },
+    "static_best": {
+      "replay_value": 0.6411508602601763,
+      "replay_matched": 19064,
+      "ips_value": 0.6437396861065271,
+      "ips_ci95": [
+        0.6342912167785699,
+        0.6531881554344843
+      ]
+    },
+    "linucb": {
+      "replay_value": 0.6748931905691229,
+      "replay_matched": 18959
+    },
+    "true_expected_reward": {
+      "random": 0.5021748782038299,
+      "static_best": 0.64106917695979,
+      "linucb_final_frozen": 0.680121827191592,
+      "oracle": 0.6817352791741791
+    }
+  },
+  "runtime_s": 33.3
+}
