@@ -1,0 +1,16 @@
+{
+  "requests": 1000,
+  "concurrency": 1,
+  "errors": 0,
+  "throughput_rps": 252.2,
+  "p50_ms": 3.81,
+  "p95_ms": 4.98,
+  "p99_ms": 5.31,
+  "cpu_count": 8,
+  "omp_num_threads": "1",
+  "loadavg_at_end": [
+    4.5,
+    4.99,
+    3.87
+  ]
+}

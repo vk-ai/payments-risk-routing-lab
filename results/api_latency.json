@@ -1,16 +1,16 @@
 {
-  "requests": 1500,
+  "requests": 4000,
   "concurrency": 20,
   "errors": 0,
-  "throughput_rps": 45.0,
-  "p50_ms": 441.44,
-  "p95_ms": 475.11,
-  "p99_ms": 487.01,
+  "throughput_rps": 296.9,
+  "p50_ms": 67.18,
+  "p95_ms": 91.0,
+  "p99_ms": 102.56,
   "cpu_count": 8,
   "omp_num_threads": "1",
   "loadavg_at_end": [
-    6.02,
-    5.25,
-    3.89
+    4.73,
+    5.02,
+    3.9
   ]
 }
