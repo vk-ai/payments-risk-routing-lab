@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import threading
+import warnings
 from contextlib import asynccontextmanager
 
 import joblib
@@ -10,6 +11,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
 from .serving import OnlineState, featurize_one
+
+warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
 class Txn(BaseModel):
     Time: float = Field(ge=0)

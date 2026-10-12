@@ -17,8 +17,9 @@ CONC = int(os.environ.get("CONC", 20)); N = int(os.environ.get("N", 4000)); PORT
 
 async def main():
     rows = np.load("artifacts/test_sample.npy")
+    env = {**os.environ, "OMP_NUM_THREADS": os.environ.get("OMP_NUM_THREADS", "1")}
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "prrl.api:create_app", "--factory",
-                             "--port", str(PORT), "--log-level", "warning", "--workers", "1"])
+                             "--port", str(PORT), "--log-level", "warning", "--workers", "1"], env=env)
     try:
         async with httpx.AsyncClient(base_url=f"http://127.0.0.1:{PORT}", timeout=10) as c:
             for _ in range(100):
@@ -45,7 +46,7 @@ async def main():
             wall = time.perf_counter() - t0
         res = {"requests": N, "concurrency": CONC, "errors": errs, "throughput_rps": round(N / wall, 1),
                "p50_ms": round(float(np.percentile(lat, 50)), 2), "p95_ms": round(float(np.percentile(lat, 95)), 2),
-               "p99_ms": round(float(np.percentile(lat, 99)), 2), "cpu_count": os.cpu_count(),
+               "p99_ms": round(float(np.percentile(lat, 99)), 2), "cpu_count": os.cpu_count(), "omp_num_threads": env["OMP_NUM_THREADS"],
                "loadavg_at_end": [round(x, 2) for x in os.getloadavg()]}
         Path("results/api_latency.json").write_text(json.dumps(res, indent=2)); print(json.dumps(res, indent=2))
     finally:

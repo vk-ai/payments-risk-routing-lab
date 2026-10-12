@@ -31,3 +31,17 @@ def test_online_velocity_increments(synth):
     assert s.velocity_and_record(k, 10)["vel_amt_key_1h"] == 1
     v = s.velocity_and_record(k, 4000)
     assert v["vel_amt_key_1h"] == 0 and v["vel_amt_key_24h"] == 2
+
+
+def test_online_features_match_offline(synth):
+    """Serving-path features must equal the offline pipeline features for the test frame."""
+    import numpy as np
+    from prrl.serving import OnlineState, featurize_one
+    tr, va, te = data.time_split(synth)
+    kb, fe, enc, trf, vaf, tef = P.build_frames(tr, va, te)
+    cols = F.BASE_COLS + F.engineered_cols()
+    sc = P.Scorer(kb, fe, enc, None, cols)
+    st = OnlineState()
+    online = [featurize_one(sc, st, r) for r in synth.to_dict("records")]
+    online = np.vstack(online)[-len(tef):]
+    np.testing.assert_allclose(online, tef[cols].to_numpy(dtype=float), rtol=1e-9)

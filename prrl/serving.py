@@ -4,7 +4,6 @@ from __future__ import annotations
 from collections import defaultdict, deque
 
 import numpy as np
-import pandas as pd
 
 from . import features as F
 
@@ -32,11 +31,19 @@ class OnlineState:
         return out
 
 
-def featurize_one(scorer, state: OnlineState, txn: dict) -> pd.DataFrame:
-    df = pd.DataFrame([txn])
-    df = F.add_basic(scorer.keys.transform(df))
-    vel = state.velocity_and_record({k: df[k].iloc[0] for k in F.KEYS}, float(txn["Time"]))
-    for c, v in vel.items():
-        df[c] = v
-    df = scorer.freq.transform(scorer.te.transform(df))
-    return df[scorer.cols].astype(np.float64)
+def featurize_one(scorer, state: OnlineState, txn: dict) -> np.ndarray:
+    """Same features as the offline pipeline, computed with plain dict/numpy ops (fast path).
+    Returns a (1, n_features) array in scorer.cols order."""
+    kb = scorer.keys
+    feats = {f"V{i}": float(txn[f"V{i}"]) for i in range(1, 29)}
+    feats["Amount"] = float(txn["Amount"])
+    feats["hour"] = float((float(txn["Time"]) // 3600) % 24)
+    code = 0
+    for c in kb.cols:
+        code = code * kb.q + int(np.searchsorted(kb.edges[c], feats[c]))
+    keys = {"amt_key": int(np.round(feats["Amount"] * 100)), "vbin_key": code}
+    feats.update(state.velocity_and_record(keys, float(txn["Time"])))
+    for k in F.KEYS:
+        feats[f"freq_{k}"] = float(scorer.freq.maps[k].get(keys[k], 0))
+        feats[f"te_{k}"] = float(scorer.te.stats[k].get(keys[k], scorer.te.prior))
+    return np.array([[feats[c] for c in scorer.cols]], dtype=np.float64)
